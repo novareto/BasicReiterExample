@@ -1,0 +1,14 @@
+--extra-index-url https://pypi.bg-kooperation.de/
+
+fanstatic
+importscan
+waitress
+horseman
+roughrider.cors
+roughrider.predicate
+roughrider.routing
+reiter.events
+reiter.form
+reiter.view
+reiter.ui
+reiter.application
