@@ -10,5 +10,7 @@ roughrider.routing
 reiter.events
 reiter.form
 reiter.view
+reiter.contenttypes
 reiter.ui
 reiter.application
+reha.siguv_theme
