@@ -12,6 +12,13 @@ from roughrider.routing.components import NamedRoutes
 TEMPLATES = TemplateLoader("./templates")
 
 
+class Request(Request):
+
+    @property
+    def user(self):
+        return None
+
+
 @dataclass
 class Reiter(Application):
 
@@ -20,24 +27,29 @@ class Reiter(Application):
         default_factory=partial(NamedRoutes, extractor=routables))
 
     def __call__(self, environ, start_response):
-        path = environ['PATH_INFO'].encode('latin-1').decode('utf-8')
+        path = environ['PATH_INFO'].encode('latin-1').decode('utf-8') or '/'
         response = self.resolve(path, environ)
         return response(environ, start_response)
 
+    def get_actions(self, *args, **kwargs):
+        return []
 
 app = Reiter()
 
 
-@app.ui.register_layout(Request)
-class Layout:
+import reha.siguv_theme
+reha.siguv_theme.install_theme(app, request_type=Request)
 
-    _template = TEMPLATES["layout.pt"]
-
-    def __init__(self, request, name):
-        self.name = name
-
-    def render(self, content, **namespace):
-        return self._template.render(content=content, **namespace)
+#@app.ui.register_layout(Request)
+#class Layout:
+#
+#    _template = TEMPLATES["layout.pt"]
+#
+#    def __init__(self, request, name):
+#        self.name = name
+#
+#    def render(self, content, **namespace):
+#        return self._template.render(content=content, **namespace)
 
 
 @app.routes.register('/')
@@ -46,3 +58,10 @@ class Index(Page):
 
     def GET(self):
         return {}
+
+
+@app.routes.register('/favicon.ico')
+class Index(Page):
+
+    def GET(self):
+        return "" 
