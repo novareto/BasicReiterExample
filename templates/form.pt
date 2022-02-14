@@ -1,0 +1,40 @@
+<div id="form">
+  <h2 tal:content="view.title" />
+  <p class="lead" tal:content="view.description" />
+  <div tal:content="structure slot: above-form" />
+  <form method="post"
+        enctype="multipart/form-data"
+        tal:attributes="action view.action"
+        novalidate>
+    <div tal:repeat="field form">
+      <div class="form-group"
+           tal:attributes="id string:field-${field.id}">
+        <label tal:replace="field.label" />
+        <span tal:replace="'*'"
+              tal:condition="field.flags.required"></span>
+        <div class="input-group has-validation">
+          <div tal:replace="structure field()" />
+          <div class="invalid-feedback"
+               tal:condition="field.errors"
+               tal:attributes="id string:feedback-${field.id}">
+            <div tal:repeat="error field.errors">
+              <span tal:content="error" />
+            </div>
+          </div>
+        </div>
+        <small class="form-text text-muted"
+	       tal:attributes="id string:help-${field.id}"
+               tal:content="field.description"
+               tal:condition="field.description" />
+      </div>
+    </div>
+    <div class="form-actions">
+      <div tal:repeat="action actions.values()">
+	<button name='form.trigger'
+                tal:attributes="value action.id; class action.css"
+                type="submit"
+                tal:content="action.title">HTML</button>
+      </div>
+    </div>
+  </form>
+</div>
